@@ -1,0 +1,45 @@
+# Before vs. After Data Quality Analysis
+
+## Project Overview
+
+This analysis compares the original employee pay equity dataset with the cleaned dataset to document the cleaning process, verify key data-quality checks, and identify any remaining limitations.
+
+**Dataset:** `employee_pay_equity_messy.csv`
+
+**Cleaned dataset:** `Employee Pay Equity - Cleaned.xlsx`
+
+## Dataset Comparison
+
+| Metric | Original Dataset | Cleaned Dataset |
+|---|---|---|
+| Data rows | 96,900 | 96,900 |
+| Row count changed | — | No |
+| Data cleaning | Raw data | Standardized and transformed |
+| Salary values | Mixed formats and currency representations | Numeric salary column created; further validation required |
+
+## Cleaning and Validation
+
+The cleaning workflow included:
+
+- Trimming and standardizing text values.
+- Standardizing selected categorical fields.
+- Handling selected missing values.
+- Transforming date fields and correcting data types.
+- Creating a numeric salary column from raw salary text.
+- Using SQL to audit duplicate employee IDs, missing values, numerical ranges, date ranges, and category consistency.
+
+## Key Findings
+
+- The original and cleaned worksheets contain the same number of data rows.
+- The SQL audit found no duplicate Employee IDs.
+- The audit checked numerical ranges and hire dates, including future dates.
+- Text and category standardization was applied during the cleaning process.
+- Salary conversion needs additional validation because some negative-looking raw salary values appear positive in the converted column.
+
+## Limitations
+
+The matching row counts do not independently prove that every record is correct. Salary-based analysis should not be treated as reliable until the conversion issue is resolved and validated. Other improvements should only be reported as confirmed when supported by comparison results.
+
+## Conclusion
+
+This project demonstrates a practical data analyst workflow covering data auditing, cleaning, SQL validation, documentation, and transparent reporting of data-quality limitations. It emphasizes that cleaning is not complete until the resulting data has been validated.

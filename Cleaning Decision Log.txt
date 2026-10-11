@@ -1,0 +1,151 @@
+# Day 54 — Cleaning Decisions and Data Quality Documentation
+
+Project: Messy Data Cleaning Showcase
+
+Tools: Microsoft Excel, Power Query, DB Browser for SQLite
+
+## 1. Project Overview
+
+The purpose of this project is to prepare an employee pay dataset for analysis and document the decisions made during data cleaning.
+
+Excel and Power Query were used to transform the working dataset. SQL was used separately to audit the original raw dataset and investigate potential data-quality issues.
+
+The original raw CSV was retained as the source dataset.
+
+## 2. Excel and Power Query — Cleaning Process
+
+### 2.1 Text Standardization
+
+What did I change?
+
+I used Trimmed Text, Capitalized Each Word, and multiple Replaced Value steps in Power Query.
+
+Why did I change it?
+
+Extra spaces, inconsistent capitalization, and variations in category labels can cause the same category to appear multiple times in reports.
+
+Result:
+
+Text-standardization transformations were applied. The final category values should be reviewed to confirm that equivalent categories were standardized correctly.
+
+### 2.2 Handling Missing Values
+
+What did I change?
+
+I replaced missing values in selected categorical columns with "Unknown" and filled selected numerical columns with median values.
+
+Why did I change it?
+
+Missing information can affect summaries and visualizations. These methods were used to handle selected missing values while retaining employee records.
+
+Result:
+
+The selected transformations were applied in the cleaning workflow. Remaining missing-value counts should be checked in the final output.
+
+### 2.3 Custom Columns and Salary Processing
+
+What did I change?
+
+I used custom-column steps and column-renaming steps during the Power Query workflow. The output contains both salary_raw and salary columns.
+
+Why did I change it?
+
+The original salary values contain different currency symbols, codes, and number formats. Separating the original values from a processed column helps preserve the source information for comparison.
+
+Result:
+
+A salary column was created, but the salary conversion requires further validation. Unusually large converted values and differences in currency formats must be investigated before the salary data is considered reliable.
+
+### 2.4 Column Management and Data Types
+
+What did I change?
+
+I used Remove Columns, Rename Columns, and Changed Type steps in Power Query.
+
+Why did I change it?
+
+Appropriate column names and data types make the dataset easier to understand and use in analysis.
+
+Result:
+
+The Power Query output was loaded to the Cleaned_Data worksheet with 96,900 rows and 20 columns. This confirms the output size, not that every value is correct.
+
+## 3. SQL — Audit of the Original Raw Dataset
+
+SQL queries were run against the original employee_pay_equity_messy table. The queries investigated the raw data and did not update or clean that SQL table.
+
+### 3.1 Missing-Value Audit
+
+I counted missing values across 19 columns to identify fields requiring attention.
+
+The audit found missing values in columns such as age, years of experience, tenure, gender, ethnicity, education level, remote status, performance rating, and performance review score.
+
+### 3.2 Duplicate Employee IDs
+
+I checked whether employee_id values appeared more than once.
+
+Result: The duplicate-ID query returned no duplicate employee IDs in the raw SQL table.
+
+### 3.3 Numeric Range Checks
+
+I inspected the minimum and maximum values of selected numerical columns.
+
+- Age: 20–68
+- Years of experience: 0–40
+- Tenure: 0–16 years
+- Performance review score: 1–5
+
+These were observed ranges and did not independently establish that every record was valid.
+
+### 3.4 Date Checks
+
+I checked the recorded hire-date range and searched for future hire dates.
+
+- Earliest date: April 1, 2014
+- Latest date: December 31, 2025
+- Future hire dates returned by the query: 0
+
+These checks did not verify every possible date-format issue.
+
+### 3.5 Category Consistency
+
+I investigated distinct values and used LOWER() and TRIM() to inspect category variations in fields such as gender, department, job title, and country.
+
+This helped identify potential inconsistencies that could affect grouping and reporting.
+
+### 3.6 Salary Investigation
+
+I tested preliminary SQL methods for interpreting salary strings containing currency symbols, codes, commas, and decimal values.
+
+The initial conversion produced unusually large values that were flagged as potential anomalies, not confirmed errors. Further investigation in Excel Power Query also revealed numerous negative-looking values in `salary_raw` that were converted to positive numbers in the cleaned `salary` column. The raw data also contains inconsistent currency-symbol encoding.
+
+The salary conversion has not been fully validated. The original `salary_raw` values have been preserved, and the affected records require further validation before salary analysis. The number of affected records has not yet been determined, and no unsupported corrections have been made.
+
+
+## 4. Overall Project Status
+
+Completed:
+
+- Applied multiple cleaning transformations in Power Query.
+- Standardized selected text values and categories.
+- Handled selected missing values.
+- Created and renamed columns.
+- Loaded the cleaned output into Excel.
+- Audited missing values, duplicate IDs, numeric ranges, dates, and category consistency using SQL.
+
+Requires further validation:
+
+- Confirm the remaining missing-value counts in Cleaned_Data.
+- Review the final standardized categories.
+- Validate the salary conversion and investigate unusual values.
+- Confirm that the cleaned dataset is suitable for the intended analysis.
+
+## 5. Conclusion
+
+This project demonstrates the difference between cleaning data and auditing data quality.
+
+Excel and Power Query were used to transform the working dataset. SQL was used to investigate the original raw dataset without modifying it.
+
+Documenting the action, reason, and result for each major decision demonstrates analytical judgment and makes the cleaning process easier to explain during interviews.
+
+The project should be considered ready for analysis only after the remaining validation checks are completed.
